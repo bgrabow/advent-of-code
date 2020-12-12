@@ -42,3 +42,37 @@
 (def part-1
   (let [[_ [x y]] (reduce step ["E" [0 0]] instructions)]
     (+ x y)))
+
+(def rotation-matrix
+  {0   [[1 0]
+        [0 1]]
+   90  [[0 -1]
+        [1 0]]
+   180 [[-1 0]
+        [0 -1]]
+   270 [[0 1]
+        [-1 0]]})
+
+(defn mat-mult
+  [m v]
+  (mapv (fn [p]
+          (reduce + (mapv * p v))) m))
+
+(defn rotate-clockwise
+  [v theta]
+  (mat-mult (rotation-matrix (mod theta 360)) v))
+
+(defn step-2
+  [[waypoint location] [op val]]
+  (case op
+    "N" [(mapv + waypoint [0 (- val)]) location]
+    "S" [(mapv + waypoint [0 (+ val)]) location]
+    "E" [(mapv + waypoint [(+ val) 0]) location]
+    "W" [(mapv + waypoint [(- val) 0]) location]
+    "L" [(rotate-clockwise waypoint (- val)) location]
+    "R" [(rotate-clockwise waypoint (+ val)) location]
+    "F" [waypoint (mapv + location (map * waypoint (repeat val)))]))
+
+(def part-2
+  (let [[_waypoint location] (reduce step-2 [[10 -1] [0 0]] instructions)]
+    (reduce + (map #(Math/abs ^long %) location))))
