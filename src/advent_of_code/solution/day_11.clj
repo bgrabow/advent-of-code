@@ -117,12 +117,6 @@
   (let [los-neighbors (los-neighbors seats)]
     (iterate-until-fixed #(step-2 % los-neighbors) seats)))
 
-#_(let [los-neighbors (los-neighbors example-seats)]
-    (-> (iterate-until-fixed #(step-2 % los-neighbors) example-seats)
-        (vals)
-        (frequencies)
-        (get \#)))
-
 (def part-2
   (-> final-seats-2
       vals
