@@ -27,3 +27,17 @@
                                     (first (vec ingredients))))]
     (reduce + (for [[ingredients] foods]
                 (count (set/difference (set ingredients) allergic-ingredients))))))
+
+
+(def part-2
+  (let [sorted-allergens (sort-by first {"wheat" #{"kqms"},
+                                         "eggs" #{"bjq"},
+                                         "nuts" #{"klplr"},
+                                         "shellfish" #{"tlgjzx"},
+                                         "peanuts" #{"dtvhzt"},
+                                         "sesame" #{"sbzd"},
+                                         "soy" #{"ctmbr"},
+                                         "fish" #{"jznhvh"}})]
+    (->> (map second sorted-allergens)
+         (map #(first (vec %)))
+         (str/join ","))))
