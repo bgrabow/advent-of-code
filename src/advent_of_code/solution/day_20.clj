@@ -22,7 +22,7 @@
 (defn find-outer-edges
   [tiles]
   (->> tiles
-       (map (fn [[id tile]]
+       (map (fn [[_id tile]]
               (mapcat #(vector
                          (map tile (reverse %))
                          (map tile %)) edges)))
