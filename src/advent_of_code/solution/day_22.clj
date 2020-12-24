@@ -66,7 +66,6 @@
 (defn recursive-game
   [state]
   (if (apply < (->> (iterate recursive-round state)
-                    (map #(doto % println))
                     (player-1-wins-repeat)
                     (drop-while (fn [[[p1-deck] [p2-deck]]]
                                   (every? seq [p1-deck p2-deck])))
@@ -85,16 +84,12 @@
       (p2-wins-round [[p1-deck p1-discard] [p2-deck p2-discard]]))
     (round [[p1-deck p1-discard] [p2-deck p2-discard]])))
 
-(let [[player-1 player-2] (map (fn [deck-string] (map #(Long/parseLong %) (str/split-lines deck-string)))
-                               (re-seq #"(?:\d+\n)+" (slurp "resources/input/day-22.txt")))]
-  (->> (iterate recursive-round [[player-1 nil] [player-2 nil]])
-       (take 4)))
-
-       ;(drop-while (fn [[[p1-deck] [p2-deck]]]
-       ;              (every? seq [p1-deck p2-deck])))))
-       ;(first)
-       ;score-game
-       ;(apply max)))
-
-(recursive-round [['(6 41 28 3 11 31 8 1 38 33 30 42 15 26 36 43) [50 44 9 19 25 12 39 14 40 2 29 13]]
-                  ['(10 35 45 34 7 5 17 46 21 24 49 16 22 20 27 23) [32 18 47 4 48 37]]])
+(def part-2
+  (let [[player-1 player-2] (map (fn [deck-string] (map #(Long/parseLong %) (str/split-lines deck-string)))
+                                 (re-seq #"(?:\d+\n)+" (slurp "resources/input/day-22.txt")))]
+    (->> (iterate recursive-round [[player-1 nil] [player-2 nil]])
+         (drop-while (fn [[[p1-deck] [p2-deck]]]
+                       (every? seq [p1-deck p2-deck])))
+         (first)
+         score-game
+         (apply max))))
