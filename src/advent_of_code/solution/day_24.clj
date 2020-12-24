@@ -1,7 +1,7 @@
 (ns advent-of-code.solution.day-24
   (:require [clojure.string :as str]))
 
-(def direction-vector
+(def double-width-neighbor
   {"e" [2 0]
    "w" [-2 0]
    "se" [1 1]
@@ -9,10 +9,20 @@
    "ne" [1 -1]
    "nw" [-1 -1]})
 
+(def cube-neighbor
+  {"e" [1 0 -1]
+   "w" [-1 0 1]
+   "se" [0 1 -1]
+   "nw" [0 -1 1]
+   "sw" [-1 1 0]
+   "ne" [1 -1 0]})
+
+(def neighbor double-width-neighbor)
+
 (defn parse-directions
   [s]
   (->> (re-seq #"e|w|se|sw|ne|nw" s)
-       (map direction-vector)
+       (map neighbor)
        (reduce (partial mapv +))))
 
 (def part-1
@@ -25,7 +35,7 @@
 
 (defn neighbors
   [p]
-  (map #(mapv + p %) (vals direction-vector)))
+  (map #(mapv + p %) (vals neighbor)))
 
 (defn step
   [black-tiles]
