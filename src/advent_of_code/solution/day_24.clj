@@ -11,7 +11,7 @@
 
 (defn parse-directions
   [s]
-  (->> (re-seq #"(?:e|w|se|sw|ne|nw)" s)
+  (->> (re-seq #"e|w|se|sw|ne|nw" s)
        (map direction-vector)
        (reduce (partial mapv +))))
 
